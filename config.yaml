@@ -1,0 +1,21 @@
+app:
+  name: golang-article-api
+  version: 1.0.0
+
+web:
+  prefork: true
+  port: 5050
+
+log:
+  level: 5
+
+database:
+  user: root
+  password: ""
+  host: localhost
+  port: 3306
+  name: golang_article_api
+  pool:
+    idle: 10
+    max: 50
+    lifetime: 600

@@ -1,0 +1,40 @@
+users:
+  - id
+  - username
+  - password
+  - email
+  - phone
+  - avatar
+  - createdAt
+  - updatedAt
+
+tags:
+  - id
+  - name
+
+articles:
+  - id
+  - thumbnail
+  - title
+  - description
+  - body
+  - createdAt
+  - updatedAt
+  - userId
+
+articles_tags:
+  - tagId
+  - articleId
+
+comments:
+  - id
+  - body
+  - createdAt
+
+users_comments:
+  - userId
+  - commentId
+
+articles_comments:
+  - articleId
+  - commentId
