@@ -17,11 +17,11 @@ type RegisterUserRequest struct {
 
 type UpdateUserRequest struct {
 	Id       string `json:"id" validate:"required,uuid4"`
-	Username string `json:"username"`
+	Username string `json:"username" validate:"max=100"`
 	Password string `json:"password"`
-	Email    string `json:"email" validate:"email"`
+	Email    string `json:"email" validate:"email,max=100"`
 	Phone    string `json:"phone" validate:"e164"`
-	Avatar   string `json:"avatar"`
+	Avatar   string `json:"avatar" validate:"max=100"`
 }
 
 type LoginUserRequest struct {
