@@ -1,14 +1,32 @@
 package repository
 
-import (
-	"context"
-	"database/sql"
-)
+import "gorm.io/gorm"
 
-type Repository interface {
-	Create(ctx context.Context, tx *sql.Tx, entity any) error
-	Update(ctx context.Context, tx *sql.Tx, entity any) error
-	Delete(ctx context.Context, tx *sql.Tx, entity any) error
-	FindById(ctx context.Context, tx *sql.Tx, entity any) error
-	FindAll(ctx context.Context, tx *sql.Tx) ([]any, error)
+type Repository[T any] struct {
+	DB *gorm.DB
+}
+
+func (r *Repository[T]) Create(db *gorm.DB, entity *T) error {
+	return db.Create(entity).Error
+}
+
+func (r *Repository[T]) Update(db *gorm.DB, entity *T) error {
+	return db.Save(entity).Error
+}
+
+func (r *Repository[T]) Delete(db *gorm.DB, entity *T) error {
+	return db.Delete(entity).Error
+}
+
+func (r *Repository[T]) FindById(db *gorm.DB, entity *T, id any) error {
+	return db.Take(entity, "id = ?", id).Error
+}
+
+func (r *Repository[T]) FindAll(db *gorm.DB) ([]T, error) {
+	var entites []T
+	if err := db.Find(&entites).Error; err != nil {
+		return nil, err
+	}
+
+	return entites, nil
 }

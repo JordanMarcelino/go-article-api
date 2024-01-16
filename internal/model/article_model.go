@@ -14,19 +14,21 @@ type ArticleResponse struct {
 }
 
 type CreateArticleRequest struct {
-	Thumbnail   string `json:"thumbnail" validate:"required"`
-	Title       string `json:"title" validate:"required,max=100"`
-	Description string `json:"description" validate:"required,max=100"`
-	Body        string `json:"body" validate:"required,min=1"`
-	UserId      string `json:"user_id" validate:"required,uuid4"`
+	Thumbnail   string          `json:"thumbnail" validate:"required"`
+	Title       string          `json:"title" validate:"required,max=100"`
+	Description string          `json:"description" validate:"required,max=100"`
+	Body        string          `json:"body" validate:"required,min=1"`
+	UserId      string          `json:"user_id" validate:"required,uuid4"`
+	Tags        []GetTagRequest `json:"tags" validate:"required,dive"`
 }
 
 type UpdateArticleRequest struct {
-	Id          string `json:"id" validate:"required,uuid4"`
-	Thumbnail   string `json:"thumbnail"`
-	Title       string `json:"title" validate:"max=100"`
-	Description string `json:"description" validate:"max=100"`
-	Body        string `json:"body" validate:"min=1"`
+	Id          string          `json:"id" validate:"required,uuid4"`
+	Thumbnail   string          `json:"thumbnail"`
+	Title       string          `json:"title" validate:"max=100"`
+	Description string          `json:"description" validate:"max=100"`
+	Body        string          `json:"body" validate:"min=1"`
+	Tags        []GetTagRequest `json:"tags" validate:"dive"`
 }
 
 type DeleteArticleRequest struct {
