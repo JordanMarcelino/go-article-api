@@ -12,11 +12,11 @@ func TagToResponse(tag *entity.Tag) *model.TagResponse {
 	}
 }
 
-func TagsToResponse(tags []entity.Tag) []*model.TagResponse {
-	var tagResponses []*model.TagResponse
+func TagsToResponse(tags []entity.Tag) []model.TagResponse {
+	var tagResponses []model.TagResponse
 
 	for _, tag := range tags {
-		tagResponses = append(tagResponses, TagToResponse(&tag))
+		tagResponses = append(tagResponses, *TagToResponse(&tag))
 	}
 
 	return tagResponses

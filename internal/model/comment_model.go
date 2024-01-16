@@ -13,3 +13,15 @@ type CreateCommentRequest struct {
 	ArticleId string `json:"article_id" validate:"required,uuid4"`
 	Body      string `json:"body" validate:"required,min=1,max=255"`
 }
+
+type GetCommentRequest struct {
+	Id string `json:"id" validate:"required,uuid4"`
+}
+
+type GetUserCommentRequest struct {
+	Id string `json:"id" validate:"required,uuid4"`
+}
+
+type DeleteCommentRequest struct {
+	Id string `json:"id" validate:"required,uuid4"`
+}

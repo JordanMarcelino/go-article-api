@@ -9,17 +9,17 @@ func CommentToResponse(comment *entity.Comment) *model.CommentResponse {
 	return &model.CommentResponse{
 		Id:        comment.ID,
 		Body:      comment.Body,
-		UserId:    comment.User.ID,
-		ArticleId: comment.Article.ID,
+		UserId:    comment.UserId,
+		ArticleId: comment.ArticleId,
 		CreatedAt: comment.CreatedAt,
 	}
 }
 
-func CommentsToResponse(comments []entity.Comment) []*model.CommentResponse {
-	var commentResponses []*model.CommentResponse
+func CommentsToResponse(comments []entity.Comment) []model.CommentResponse {
+	var commentResponses []model.CommentResponse
 
 	for _, comment := range comments {
-		commentResponses = append(commentResponses, CommentToResponse(&comment))
+		commentResponses = append(commentResponses, *CommentToResponse(&comment))
 	}
 
 	return commentResponses
