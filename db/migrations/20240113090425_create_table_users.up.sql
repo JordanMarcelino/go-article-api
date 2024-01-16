@@ -6,7 +6,7 @@ CREATE TABLE users
     email      VARCHAR(100) NOT NULL UNIQUE,
     phone      VARCHAR(100),
     avatar     VARCHAR(100),
-    created_at DATETIME     NOT NULL,
-    updated_at DATETIME,
+    created_at BIGINT     NOT NULL,
+    updated_at BIGINT,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;

@@ -1,8 +1,7 @@
 package entity
 
-import "github.com/google/uuid"
-
 type Tag struct {
-	Id   uuid.UUID
-	Name string
+	ID       string
+	Name     string
+	Articles []Article `gorm:"many2many:articles_tags;foreignKey:id;joinForeignKey:tag_id;references:id;joinReferences:article_id"`
 }

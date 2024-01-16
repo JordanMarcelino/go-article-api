@@ -18,4 +18,5 @@ database:
   pool:
     idle: 10
     max: 50
-    lifetime: 600
+    lifetime: 30
+    idletime: 5

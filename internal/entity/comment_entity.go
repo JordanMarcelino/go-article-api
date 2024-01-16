@@ -1,12 +1,9 @@
 package entity
 
-import (
-	"github.com/google/uuid"
-	"time"
-)
-
 type Comment struct {
-	Id        uuid.UUID
-	Body      uuid.UUID
-	CreatedAt time.Time
+	ID        string
+	Body      string
+	CreatedAt int64 `gorm:"autoCreateTime:milli"`
+	User      `gorm:"foreignKey:user_id;references:id"`
+	Article   `gorm:"foreignKey:article_id;references:id"`
 }

@@ -842,6 +842,12 @@
         "properties": {
           "body": {
             "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "article_id": {
+            "type": "string"
           }
         }
       },
@@ -849,6 +855,12 @@
         "type": "object",
         "properties": {
           "id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "article_id": {
             "type": "string"
           },
           "body": {

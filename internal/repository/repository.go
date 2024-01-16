@@ -5,10 +5,10 @@ import (
 	"database/sql"
 )
 
-type Repository[T any] interface {
-	Create(ctx context.Context, tx *sql.Tx, entity *T) error
-	Update(ctx context.Context, tx *sql.Tx, entity *T) error
-	Delete(ctx context.Context, tx *sql.Tx, entity *T) error
-	FindById(ctx context.Context, tx *sql.Tx, entity *T) error
-	FindAll(ctx context.Context, tx *sql.Tx) ([]T, error)
+type Repository interface {
+	Create(ctx context.Context, tx *sql.Tx, entity any) error
+	Update(ctx context.Context, tx *sql.Tx, entity any) error
+	Delete(ctx context.Context, tx *sql.Tx, entity any) error
+	FindById(ctx context.Context, tx *sql.Tx, entity any) error
+	FindAll(ctx context.Context, tx *sql.Tx) ([]any, error)
 }

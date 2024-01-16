@@ -1,17 +1,14 @@
 package entity
 
-import (
-	"github.com/google/uuid"
-	"time"
-)
-
 type User struct {
-	Id        uuid.UUID
+	ID        string
 	Username  string
 	Password  string
 	Email     string
 	Phone     string
 	Avatar    string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt int64     `gorm:"autoCreateTime:milli"`
+	UpdatedAt int64     `gorm:"autoCreateTime:milli;autoUpdateTime:milli"`
+	Articles  []Article `gorm:"foreignKey:user_id;references:id"`
+	Comments  []Comment `gorm:"foreignKey:user_id;references:id"`
 }
