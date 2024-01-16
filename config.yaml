@@ -20,3 +20,6 @@ database:
     max: 50
     lifetime: 30
     idletime: 5
+
+jwt:
+  secret: @secret$

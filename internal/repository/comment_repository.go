@@ -15,9 +15,9 @@ func NewCommentRepository(log *logrus.Logger) *CommentRepository {
 	return &CommentRepository{Log: log}
 }
 
-func (r *CommentRepository) FindAllWithRelation(db *gorm.DB) ([]entity.Comment, error) {
+func (r *CommentRepository) FindUserComments(db *gorm.DB, id string) ([]entity.Comment, error) {
 	var comments []entity.Comment
-	if err := db.Preload("User").Preload("Article").Find(&comments).Error; err != nil {
+	if err := db.Preload("User", "id = ?", id).Preload("Article").Find(&comments).Error; err != nil {
 		return nil, err
 	}
 

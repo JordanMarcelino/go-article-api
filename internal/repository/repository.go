@@ -30,3 +30,9 @@ func (r *Repository[T]) FindAll(db *gorm.DB) ([]T, error) {
 
 	return entites, nil
 }
+
+func (r *Repository[T]) CountById(db *gorm.DB, id any) (int64, error) {
+	var total int64
+	err := db.Model(new(T)).Where("id = ?", id).Count(&total).Error
+	return total, err
+}

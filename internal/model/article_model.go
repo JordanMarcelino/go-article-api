@@ -1,16 +1,16 @@
 package model
 
 type ArticleResponse struct {
-	Id          string            `json:"id"`
-	Thumbnail   string            `json:"thumbnail"`
-	Title       string            `json:"title"`
-	Description string            `json:"description"`
-	Body        string            `json:"body"`
-	CreatedAt   int64             `json:"created_at"`
-	UpdatedAt   int64             `json:"updated_at"`
-	UserId      string            `json:"user_id"`
-	Tags        []TagResponse     `json:"tags"`
-	Comments    []CommentResponse `json:"comments"`
+	Id          string             `json:"id"`
+	Thumbnail   string             `json:"thumbnail"`
+	Title       string             `json:"title"`
+	Description string             `json:"description"`
+	Body        string             `json:"body"`
+	CreatedAt   int64              `json:"created_at"`
+	UpdatedAt   int64              `json:"updated_at"`
+	UserId      string             `json:"user_id"`
+	Tags        []*TagResponse     `json:"tags"`
+	Comments    []*CommentResponse `json:"comments"`
 }
 
 type CreateArticleRequest struct {
