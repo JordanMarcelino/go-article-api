@@ -72,13 +72,13 @@ func (c *TagUseCase) Update(ctx context.Context, request *model.UpdateTagRequest
 	return converter.TagToResponse(tag), nil
 }
 
-func (c *TagUseCase) Delete(ctx context.Context, request *model.DeleteTagRequest) (*model.TagResponse, error) {
+func (c *TagUseCase) Delete(ctx context.Context, request *model.DeleteTagRequest) error {
 	tx := c.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	if err := c.Validate.StructCtx(ctx, request); err != nil {
 		c.Log.Warnf("Invalid request body : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return fiber.ErrBadRequest
 	}
 
 	tag := new(entity.Tag)
@@ -86,15 +86,15 @@ func (c *TagUseCase) Delete(ctx context.Context, request *model.DeleteTagRequest
 
 	if err := c.TagRepository.Delete(tx, tag); err != nil {
 		c.Log.Warnf("Failed delete tag to database : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return fiber.ErrInternalServerError
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		c.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return fiber.ErrInternalServerError
 	}
 
-	return converter.TagToResponse(tag), nil
+	return nil
 }
 
 func (c *TagUseCase) Get(ctx context.Context, request *model.GetTagRequest) (*model.TagResponse, error) {

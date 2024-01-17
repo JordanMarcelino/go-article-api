@@ -346,7 +346,7 @@
             "name": "tagId",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             },
             "in": "path"
           }
@@ -387,7 +387,7 @@
             "name": "tagId",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             },
             "in": "path"
           }
@@ -438,7 +438,7 @@
             "name": "tagId",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             },
             "in": "path"
           }

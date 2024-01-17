@@ -137,13 +137,13 @@ func (c *ArticleUseCase) Get(ctx context.Context, request *model.GetArticleReque
 	return converter.ArticleToResponse(article), nil
 }
 
-func (c *ArticleUseCase) Delete(ctx context.Context, request *model.DeleteArticleRequest) (*model.ArticleResponse, error) {
+func (c *ArticleUseCase) Delete(ctx context.Context, request *model.DeleteArticleRequest) error {
 	tx := c.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	if err := c.Validate.StructCtx(ctx, request); err != nil {
 		c.Log.Warnf("Invalid request body : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return fiber.ErrBadRequest
 	}
 
 	article := new(entity.Article)
@@ -151,15 +151,15 @@ func (c *ArticleUseCase) Delete(ctx context.Context, request *model.DeleteArticl
 
 	if err := c.ArticleRepository.DeleteWithRelation(tx, article); err != nil {
 		c.Log.Warnf("Failed delete article from database : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return fiber.ErrInternalServerError
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		c.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return fiber.ErrInternalServerError
 	}
 
-	return converter.ArticleToResponse(article), nil
+	return nil
 }
 
 func (c *ArticleUseCase) List(ctx context.Context) ([]model.ArticleResponse, error) {
