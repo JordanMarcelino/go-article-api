@@ -19,3 +19,13 @@ func ArticleToResponse(article *entity.Article) *model.ArticleResponse {
 		Comments:    CommentsToResponse(article.Comments),
 	}
 }
+
+func ArticlesToResponses(articles []entity.Article) []model.ArticleResponse {
+	var responses []model.ArticleResponse
+
+	for _, article := range articles {
+		responses = append(responses, *ArticleToResponse(&article))
+	}
+
+	return responses
+}

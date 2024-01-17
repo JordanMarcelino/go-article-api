@@ -33,3 +33,11 @@ func (r *ArticleRepository) FindByIdWithRelation(db *gorm.DB, article *entity.Ar
 func (r *ArticleRepository) CreateWithRelation(db *gorm.DB, article *entity.Article) error {
 	return db.Create(article).Association("Tags").Append(&article.Tags)
 }
+
+func (r *ArticleRepository) UpdateWithRelation(db *gorm.DB, article *entity.Article) error {
+	return db.Save(article).Association("Tags").Append(&article.Tags)
+}
+
+func (r *ArticleRepository) DeleteWithRelation(db *gorm.DB, article *entity.Article) error {
+	return db.Delete(article).Association("Tags").Delete(&article.Tags)
+}

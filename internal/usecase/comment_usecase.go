@@ -27,6 +27,7 @@ func NewCommentUseCase(DB *gorm.DB, log *logrus.Logger, validate *validator.Vali
 
 func (c *CommentUseCase) Create(ctx context.Context, request *model.CreateCommentRequest) (*model.CommentResponse, error) {
 	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
 
 	if err := c.Validate.StructCtx(ctx, request); err != nil {
 		c.Log.Warnf("Invalid request body : %+v", err)
@@ -54,6 +55,7 @@ func (c *CommentUseCase) Create(ctx context.Context, request *model.CreateCommen
 
 func (c *CommentUseCase) Get(ctx context.Context, request *model.GetCommentRequest) (*model.CommentResponse, error) {
 	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
 
 	if err := c.Validate.StructCtx(ctx, request); err != nil {
 		c.Log.Warnf("Invalid request body : %+v", err)
@@ -77,6 +79,7 @@ func (c *CommentUseCase) Get(ctx context.Context, request *model.GetCommentReque
 
 func (c *CommentUseCase) Delete(ctx context.Context, request *model.DeleteCommentRequest) error {
 	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
 
 	if err := c.Validate.StructCtx(ctx, request); err != nil {
 		c.Log.Warnf("Invalid request body : %+v", err)
@@ -101,6 +104,7 @@ func (c *CommentUseCase) Delete(ctx context.Context, request *model.DeleteCommen
 
 func (c *CommentUseCase) User(ctx context.Context, request *model.GetUserCommentRequest) ([]model.CommentResponse, error) {
 	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
 
 	if err := c.Validate.StructCtx(ctx, request); err != nil {
 		c.Log.Warnf("Invalid request body : %+v", err)
