@@ -6,13 +6,12 @@ import (
 	"github.com/jordanmarcelino/go-article-api/internal/model"
 	"github.com/jordanmarcelino/go-article-api/internal/usecase"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
+	"os"
 	"time"
 )
 
 type UserController struct {
 	Log     *logrus.Logger
-	Config  *viper.Viper
 	UseCase *usecase.UserUseCase
 }
 
@@ -64,7 +63,7 @@ func (c *UserController) Login(ctx *fiber.Ctx) error {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	t, err := token.SignedString([]byte(c.Config.GetString("jwt.secret")))
+	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		c.Log.Warnf("Failed to generate jwt token : %+v", err)
 		return fiber.ErrInternalServerError
