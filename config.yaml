@@ -3,16 +3,19 @@ app:
   version: 1.0.0
 
 web:
-  prefork: true
+  prefork: false
   port: 5050
 
 log:
   level: 5
 
 database:
-  user: root
-  password: ""
-  host: localhost
+#  user: root
+#  password: ""
+#  host: localhost
+  user: user
+  password: secret
+  host: database
   port: 3306
   name: golang_article_api
   pool:

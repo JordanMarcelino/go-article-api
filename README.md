@@ -7,7 +7,7 @@ Practicing creating APIs using the Go programming language.
 ## Tech Stack
 
 - Golang : https://github.com/golang/go
-- MySQL (Database) : https://github.com/mysql/mysql-server
+- PostgreSQL (Database) : https://github.com/postgres/postgres
 
 ## Framework & Library
 
@@ -40,11 +40,13 @@ cd golang-article-api
 --> Build & run docker container :
 
 ```bash
-docker-compose up --build
+docker build -t golang-article-api -f ./build/package/Dockerfile .
+docker compose -f ./build/package/docker-compose.yaml -up -d
 ```
 
 --> Stop the container :
 
 ```bash
+cd ./build/package/
 docker-compose down
 ```

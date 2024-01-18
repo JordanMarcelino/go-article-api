@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/jordanmarcelino/go-article-api/internal/controller"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -24,6 +25,13 @@ func NewRouteConfig(app *fiber.App, config *viper.Viper, log *logrus.Logger, use
 }
 
 func SetupRoutes(c *RouteConfig) {
+	origins := fmt.Sprintf("http://localhost:%d, https://localhost:%d, http://localhost, https://localhost", c.Config.GetInt("web.port"), c.Config.GetInt("web.port"))
+
+	c.App.Use(cors.New(cors.Config{
+		AllowOrigins: origins,
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
+
 	api := c.App.Group("/api")
 	userApi := api.Group("/users")
 	articleApi := api.Group("/articles")
