@@ -1,1 +1,21 @@
 version: "3.8"
+
+services:
+  database:
+    image: postgres:14-alpine
+    restart: always
+    ports:
+      - "5051:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=golang_article_api
+  golang-article:
+    image: golang-article-api
+    restart: always
+    ports:
+      - "5050:5050"
+    environment:
+      - JWT_SECRET="@secret$"
+    depends_on:
+      - database
