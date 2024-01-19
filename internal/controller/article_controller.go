@@ -94,11 +94,6 @@ func (c *ArticleController) Get(ctx *fiber.Ctx) error {
 	request := new(model.GetArticleRequest)
 	request.Id = ctx.Params("articleId")
 
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
-	}
-
 	response, err := c.UseCase.Get(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to get article : %+v", err)

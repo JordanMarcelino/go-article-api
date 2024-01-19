@@ -33,6 +33,8 @@ func (c *TagUseCase) Create(ctx context.Context, request *model.CreateTagRequest
 	}
 
 	tag := new(entity.Tag)
+	tag.Name = request.Name
+
 	if err := c.TagRepository.Create(tx, tag); err != nil {
 		c.Log.Warnf("Failed create tag to database : %+v", err)
 		return nil, fiber.ErrInternalServerError

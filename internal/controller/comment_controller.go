@@ -44,11 +44,6 @@ func (c *CommentController) Get(ctx *fiber.Ctx) error {
 	request := new(model.GetCommentRequest)
 	request.Id = ctx.Params("commentId")
 
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
-	}
-
 	response, err := c.UseCase.Get(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to get comment : %+v", err)

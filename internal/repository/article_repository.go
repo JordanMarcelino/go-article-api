@@ -18,7 +18,7 @@ func NewArticleRepository(log *logrus.Logger) *ArticleRepository {
 func (r *ArticleRepository) FindAllWithRelation(db *gorm.DB) ([]entity.Article, error) {
 	var articles []entity.Article
 
-	if err := db.Preload("User").Preload("Tag").Preload("Comment").Find(&articles).Error; err != nil {
+	if err := db.Preload("Tags").Preload("Comments").Find(&articles).Error; err != nil {
 		return nil, err
 	}
 
@@ -26,7 +26,7 @@ func (r *ArticleRepository) FindAllWithRelation(db *gorm.DB) ([]entity.Article, 
 }
 
 func (r *ArticleRepository) FindByIdWithRelation(db *gorm.DB, article *entity.Article, id string) error {
-	return db.Preload("User").Preload("Tag").Preload("Comment").Take(article, "id = ?",
+	return db.Preload("Tags").Preload("Comments").Take(article, "id = ?",
 		id).Error
 }
 

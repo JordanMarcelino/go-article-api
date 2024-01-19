@@ -117,10 +117,6 @@ func (c *TagController) Get(ctx *fiber.Ctx) error {
 	}
 
 	request.Id = int64(id)
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
-	}
 
 	response, err := c.UseCase.Get(ctx.UserContext(), request)
 	if err != nil {
