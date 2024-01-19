@@ -9,4 +9,4 @@ CREATE TABLE users
     created_at BIGINT     NOT NULL,
     updated_at BIGINT,
     PRIMARY KEY (id)
-) ENGINE = InnoDB;
+)

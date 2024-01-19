@@ -6,8 +6,12 @@ import (
 )
 
 func main() {
-	app := di.InitializedServer()
+	cfg := di.InitializedViper()
+	logger := di.InitializedLogrus(cfg)
 
-	config.SetupRoutes(app)
-	config.StartServer(app)
+	config.MigrateDB(cfg, logger)
+
+	server := di.InitializedServer(cfg, logger)
+	server.SetupRoutes()
+	server.StartServer()
 }

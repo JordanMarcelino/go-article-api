@@ -22,9 +22,10 @@ type RouteConfig struct {
 
 func NewRouteConfig(app *fiber.App, config *viper.Viper, log *logrus.Logger, userController *controller.UserController, articleController *controller.ArticleController, tagController *controller.TagController, commentController *controller.CommentController, authMiddleware fiber.Handler) *RouteConfig {
 	return &RouteConfig{App: app, Config: config, Log: log, UserController: userController, ArticleController: articleController, TagController: tagController, CommentController: commentController, AuthMiddleware: authMiddleware}
+
 }
 
-func SetupRoutes(c *RouteConfig) {
+func (c *RouteConfig) SetupRoutes() {
 	origins := fmt.Sprintf("http://localhost:%d, https://localhost:%d, http://localhost, https://localhost", c.Config.GetInt("web.port"), c.Config.GetInt("web.port"))
 
 	c.App.Use(cors.New(cors.Config{
@@ -32,7 +33,7 @@ func SetupRoutes(c *RouteConfig) {
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
-	api := c.App.Group("/api")
+	api := c.App.Group("/api/v1")
 	userApi := api.Group("/users")
 	articleApi := api.Group("/articles")
 	tagApi := api.Group("/tags")
@@ -40,7 +41,7 @@ func SetupRoutes(c *RouteConfig) {
 
 	userApi.Post("/signup", c.UserController.Register)
 	userApi.Post("/login", c.UserController.Login)
-	userApi.Get("/:userId", c.AuthMiddleware, c.UserController.Update)
+	userApi.Get("/:userId", c.AuthMiddleware, c.UserController.Get)
 	userApi.Put("/:userId", c.AuthMiddleware, c.UserController.Update)
 	userApi.Put("/:userId/comments", c.AuthMiddleware, c.CommentController.User)
 
@@ -64,7 +65,7 @@ func SetupRoutes(c *RouteConfig) {
 	commentApi.Delete("/:commentId", c.CommentController.Delete)
 }
 
-func StartServer(c *RouteConfig) {
+func (c *RouteConfig) StartServer() {
 	webPort := c.Config.GetInt("web.port")
 	err := c.App.Listen(fmt.Sprintf(":%d", webPort))
 

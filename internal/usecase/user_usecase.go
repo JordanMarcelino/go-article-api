@@ -52,13 +52,7 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 		return fiber.ErrInternalServerError
 	}
 
-	password, err := util.HashPassword(request.Password)
-	if err != nil {
-		c.Log.Warnf("Failed to generate bcrypt hash : %+v", err)
-		return fiber.ErrInternalServerError
-	}
-
-	if authorize := util.CheckPasswordHash(password, user.Password); !authorize {
+	if authorize := util.CheckPasswordHash(request.Password, user.Password); !authorize {
 		c.Log.Warnf("Password doesn't match")
 		return fiber.ErrUnauthorized
 	}
@@ -141,19 +135,33 @@ func (c *UserUseCase) Update(ctx context.Context, request *model.UpdateUserReque
 		return nil, fiber.ErrNotFound
 	}
 
-	password, err := util.HashPassword(request.Password)
-	if err != nil {
-		c.Log.Warnf("Failed to generate bcrypt hash : %+v", err)
-		return nil, fiber.ErrInternalServerError
+	user := new(entity.User)
+
+	c.UserRepository.FindById(tx, user, request.Id)
+
+	if request.Password != "" {
+		password, err := util.HashPassword(request.Password)
+		if err != nil {
+			c.Log.Warnf("Failed to generate bcrypt hash : %+v", err)
+			return nil, fiber.ErrInternalServerError
+		}
+		user.Password = password
 	}
 
-	user := &entity.User{
-		ID:       request.Id,
-		Username: request.Username,
-		Email:    request.Email,
-		Password: password,
-		Avatar:   request.Avatar,
-		Phone:    request.Phone,
+	if request.Username != "" {
+		user.Username = request.Username
+	}
+
+	if request.Email != "" {
+		user.Email = request.Email
+	}
+
+	if request.Phone != "" {
+		user.Phone = request.Phone
+	}
+
+	if request.Avatar != "" {
+		user.Avatar = request.Avatar
 	}
 
 	if err := c.UserRepository.Update(tx, user); err != nil {

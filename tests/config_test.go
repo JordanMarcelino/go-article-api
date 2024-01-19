@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"fmt"
+	"github.com/jordanmarcelino/go-article-api/internal/util"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -42,4 +44,13 @@ func TestLogrus(t *testing.T) {
 	assert.NotNil(t, log)
 
 	log.Info("Testing log")
+}
+
+func TestHashing(t *testing.T) {
+	password := "kebab123"
+	hashPassword, _ := util.HashPassword(password)
+	fmt.Println(hashPassword)
+
+	fmt.Println(util.CheckPasswordHash(password, hashPassword))
+	fmt.Println(util.CheckPasswordHash(hashPassword, hashPassword))
 }

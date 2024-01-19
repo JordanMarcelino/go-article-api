@@ -13,16 +13,26 @@ import (
 	"github.com/jordanmarcelino/go-article-api/internal/middleware"
 	"github.com/jordanmarcelino/go-article-api/internal/repository"
 	"github.com/jordanmarcelino/go-article-api/internal/usecase"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 // Injectors from injector.go:
 
-func InitializedServer() *config.RouteConfig {
-	viper := config.NewViper()
-	app := config.NewFiber(viper)
-	logger := config.NewLogger(viper)
-	db := config.NewDatabase(viper, logger)
-	validate := config.NewValidator(viper)
+func InitializedViper() *viper.Viper {
+	viperViper := config.NewViper()
+	return viperViper
+}
+
+func InitializedLogrus(cfg *viper.Viper) *logrus.Logger {
+	logger := config.NewLogger(cfg)
+	return logger
+}
+
+func InitializedServer(cfg *viper.Viper, logger *logrus.Logger) *config.RouteConfig {
+	app := config.NewFiber(cfg)
+	db := config.NewDatabase(cfg, logger)
+	validate := config.NewValidator(cfg)
 	userRepository := repository.NewUserRepository(logger)
 	userUseCase := usecase.NewUserUseCase(db, logger, validate, userRepository)
 	userController := controller.NewUserController(logger, userUseCase)
@@ -36,7 +46,7 @@ func InitializedServer() *config.RouteConfig {
 	commentUseCase := usecase.NewCommentUseCase(db, logger, validate, commentRepository)
 	commentController := controller.NewCommentController(logger, commentUseCase)
 	v := middleware.Protected()
-	routeConfig := config.NewRouteConfig(app, viper, logger, userController, articleController, tagController, commentController, v)
+	routeConfig := config.NewRouteConfig(app, cfg, logger, userController, articleController, tagController, commentController, v)
 	return routeConfig
 }
 

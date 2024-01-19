@@ -107,3 +107,22 @@ func (c *UserController) Update(ctx *fiber.Ctx) error {
 		Data: response,
 	})
 }
+
+func (c *UserController) Get(ctx *fiber.Ctx) error {
+	userId := ctx.Params("userId")
+
+	response, err := c.UseCase.FindById(ctx.UserContext(), userId)
+	if err != nil {
+		c.Log.Warnf("Failed to get user : %+v", err)
+		return fiber.ErrInternalServerError
+	}
+
+	return ctx.JSON(model.WebResponse[*model.UserResponse]{
+		Info: map[string]any{
+			"success": true,
+			"meta":    nil,
+			"message": "Success get existing user",
+		},
+		Data: response,
+	})
+}

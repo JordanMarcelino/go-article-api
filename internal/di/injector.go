@@ -10,6 +10,8 @@ import (
 	"github.com/jordanmarcelino/go-article-api/internal/middleware"
 	"github.com/jordanmarcelino/go-article-api/internal/repository"
 	"github.com/jordanmarcelino/go-article-api/internal/usecase"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 var userSet = wire.NewSet(
@@ -36,10 +38,18 @@ var commentSet = wire.NewSet(
 	controller.NewCommentController,
 )
 
-func InitializedServer() *config.RouteConfig {
+func InitializedViper() *viper.Viper {
+	wire.Build(config.NewViper)
+	return nil
+}
+
+func InitializedLogrus(cfg *viper.Viper) *logrus.Logger {
+	wire.Build(config.NewLogger)
+	return nil
+}
+
+func InitializedServer(cfg *viper.Viper, logger *logrus.Logger) *config.RouteConfig {
 	wire.Build(
-		config.NewViper,
-		config.NewLogger,
 		config.NewFiber,
 		config.NewValidator,
 		config.NewDatabase,
@@ -50,5 +60,6 @@ func InitializedServer() *config.RouteConfig {
 		middleware.Protected,
 		config.NewRouteConfig,
 	)
+
 	return nil
 }

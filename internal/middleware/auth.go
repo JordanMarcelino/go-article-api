@@ -3,14 +3,14 @@ package middleware
 import (
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/jordanmarcelino/go-article-api/internal/config"
 	"github.com/jordanmarcelino/go-article-api/internal/model"
+	"os"
 )
 
 // Protected protect routes
 func Protected() fiber.Handler {
 	return jwtware.New(jwtware.Config{
-		SigningKey:   jwtware.SigningKey{Key: []byte(config.GetEnv("JWT_SECRET", "secret"))},
+		SigningKey:   jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
 		ErrorHandler: jwtError,
 	})
 }

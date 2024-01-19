@@ -10,4 +10,4 @@ CREATE TABLE articles
     updated_at  BIGINT,
     PRIMARY KEY (id),
     CONSTRAINT fk_articles_user_id FOREIGN KEY (user_id) REFERENCES users (id)
-) ENGINE = InnoDB;
+)
