@@ -13,5 +13,6 @@ FROM alpine:3.14
 COPY --from=builder /app/config.yaml /config.yaml
 COPY --from=builder /app/binary /app/binary
 
+ENV JWT_SECRET="@secret$" POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres DB_HOST=database
 EXPOSE 5050
 ENTRYPOINT /app/binary

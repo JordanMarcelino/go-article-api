@@ -7,4 +7,5 @@ import (
 
 func NewValidator(viper *viper.Viper) *validator.Validate {
 	return validator.New()
+
 }

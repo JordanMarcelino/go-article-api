@@ -11,9 +11,9 @@ import (
 )
 
 func NewDatabase(viper *viper.Viper, log *logrus.Logger) *gorm.DB {
-	username := viper.GetString("database.user")
-	password := viper.GetString("database.password")
-	host := viper.GetString("database.host")
+	username := GetEnv("POSTGRES_USER", viper.GetString("database.user"))
+	password := GetEnv("POSTGRES_PASSWORD", viper.GetString("database.password"))
+	host := GetEnv("DB_HOST", viper.GetString("database.host"))
 	port := viper.GetInt("database.port")
 	database := viper.GetString("database.name")
 	idleConnection := viper.GetInt("database.pool.idle")

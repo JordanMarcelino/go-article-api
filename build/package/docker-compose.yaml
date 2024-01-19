@@ -15,7 +15,5 @@ services:
     restart: always
     ports:
       - "5050:5050"
-    environment:
-      - JWT_SECRET="@secret$"
     depends_on:
       - database

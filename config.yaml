@@ -10,13 +10,10 @@ log:
   level: 5
 
 database:
-#  user: root
-#  password: ""
-#  host: localhost
-  user: user
-  password: secret
-  host: database
-  port: 3306
+  user: postgres
+  password: wkwkland
+  host: localhost
+  port: 5432
   name: golang_article_api
   pool:
     idle: 10
