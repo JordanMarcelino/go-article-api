@@ -69,11 +69,6 @@ func (c *ArticleController) Delete(ctx *fiber.Ctx) error {
 	request := new(model.DeleteArticleRequest)
 	request.Id = ctx.Params("articleId")
 
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
-	}
-
 	err := c.UseCase.Delete(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to delete article : %+v", err)

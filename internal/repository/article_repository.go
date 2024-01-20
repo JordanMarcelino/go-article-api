@@ -35,9 +35,9 @@ func (r *ArticleRepository) CreateWithRelation(db *gorm.DB, article *entity.Arti
 }
 
 func (r *ArticleRepository) UpdateWithRelation(db *gorm.DB, article *entity.Article) error {
-	return db.Save(article).Association("Tags").Append(&article.Tags)
+	return db.Model(article).Association("Tags").Replace(&article.Tags)
 }
 
 func (r *ArticleRepository) DeleteWithRelation(db *gorm.DB, article *entity.Article) error {
-	return db.Delete(article).Association("Tags").Delete(&article.Tags)
+	return db.Model(article).Association("Tags").Clear()
 }

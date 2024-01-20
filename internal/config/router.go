@@ -43,7 +43,7 @@ func (c *RouteConfig) SetupRoutes() {
 	userApi.Post("/login", c.UserController.Login)
 	userApi.Get("/:userId", c.AuthMiddleware, c.UserController.Get)
 	userApi.Put("/:userId", c.AuthMiddleware, c.UserController.Update)
-	userApi.Put("/:userId/comments", c.AuthMiddleware, c.CommentController.User)
+	userApi.Get("/:userId/comments", c.AuthMiddleware, c.CommentController.User)
 
 	articleApi.Use(c.AuthMiddleware)
 	articleApi.Get("", c.ArticleController.List)

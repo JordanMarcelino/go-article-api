@@ -79,29 +79,51 @@ func (c *ArticleUseCase) Update(ctx context.Context, request *model.UpdateArticl
 		return nil, fiber.ErrBadRequest
 	}
 
-	var tagIds []int64
-
-	for _, tag := range request.Tags {
-		tagIds = append(tagIds, tag.Id)
-	}
-
-	tags, err := c.TagRepository.FindByIds(tx, tagIds)
-	if err != nil {
-		c.Log.Warnf("Failed to get tags from database : %+v", err)
+	article := new(entity.Article)
+	if err := c.ArticleRepository.FindByIdWithRelation(tx, article, request.Id); err != nil {
+		c.Log.Warnf("Failed to get article from database : %+v", err)
 		return nil, fiber.ErrInternalServerError
 	}
 
-	article := &entity.Article{
-		ID:          uuid.NewString(),
-		Thumbnail:   request.Thumbnail,
-		Title:       request.Title,
-		Description: request.Description,
-		Body:        request.Body,
-		Tags:        tags,
+	if len(request.Tags) > 0 {
+		var tagIds []int64
+
+		for _, tag := range request.Tags {
+			tagIds = append(tagIds, tag.Id)
+		}
+
+		tags, err := c.TagRepository.FindByIds(tx, tagIds)
+		if err != nil {
+			c.Log.Warnf("Failed to get tags from database : %+v", err)
+			return nil, fiber.ErrInternalServerError
+		}
+
+		article.Tags = tags
+	}
+
+	if request.Thumbnail != "" {
+		article.Thumbnail = request.Thumbnail
+	}
+
+	if request.Title != "" {
+		article.Title = request.Title
+	}
+
+	if request.Description != "" {
+		article.Description = request.Description
+	}
+
+	if request.Body != "" {
+		article.Body = request.Body
+	}
+
+	if err := c.ArticleRepository.Update(tx, article); err != nil {
+		c.Log.Warnf("Failed update article to database : %+v", err)
+		return nil, fiber.ErrInternalServerError
 	}
 
 	if err := c.ArticleRepository.UpdateWithRelation(tx, article); err != nil {
-		c.Log.Warnf("Failed update article to database : %+v", err)
+		c.Log.Warnf("Failed update article tags to database : %+v", err)
 		return nil, fiber.ErrInternalServerError
 	}
 
@@ -147,9 +169,22 @@ func (c *ArticleUseCase) Delete(ctx context.Context, request *model.DeleteArticl
 	}
 
 	article := new(entity.Article)
-	article.ID = request.Id
+	if err := c.ArticleRepository.FindByIdWithRelation(tx, article, request.Id); err != nil {
+		c.Log.Warnf("Failed get article from database : %+v", err)
+		return fiber.ErrInternalServerError
+	}
 
 	if err := c.ArticleRepository.DeleteWithRelation(tx, article); err != nil {
+		c.Log.Warnf("Failed delete article tags from database : %+v", err)
+		return fiber.ErrInternalServerError
+	}
+
+	if err := c.CommentRepository.DeleteAllByArticleId(tx, request.Id); err != nil {
+		c.Log.Warnf("Failed delete article comments from database : %+v", err)
+		return fiber.ErrInternalServerError
+	}
+
+	if err := c.ArticleRepository.Delete(tx, article); err != nil {
 		c.Log.Warnf("Failed delete article from database : %+v", err)
 		return fiber.ErrInternalServerError
 	}

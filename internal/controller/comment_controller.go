@@ -64,11 +64,6 @@ func (c *CommentController) User(ctx *fiber.Ctx) error {
 	request := new(model.GetUserCommentRequest)
 	request.Id = ctx.Params("userID")
 
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
-	}
-
 	response, err := c.UseCase.User(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to get comments : %+v", err)
@@ -88,12 +83,7 @@ func (c *CommentController) User(ctx *fiber.Ctx) error {
 func (c *CommentController) Delete(ctx *fiber.Ctx) error {
 	request := new(model.DeleteCommentRequest)
 	request.Id = ctx.Params("commentId")
-
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
-	}
-
+	
 	err := c.UseCase.Delete(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to delete comment : %+v", err)
